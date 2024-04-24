@@ -2,6 +2,7 @@ const fs = require("fs");
 
 const Pairing = artifacts.require("Pairing");
 const Verifier = artifacts.require("Verifier");
+const ERC20 = artifacts.require("ERC20");
 
 const EscrowShield = artifacts.require("EscrowShield");
 const functionNames = [
@@ -15,7 +16,7 @@ const vkInput = [];
 let vk = [];
 functionNames.forEach((name) => {
 	const vkJson = JSON.parse(
-		fs.readFileSync(`/app/orchestration/common/db/${name}_vk.key`, "utf-8")
+		fs.readFileSync(/app/orchestration/common/db/${name}_vk.key, "utf-8")
 	);
 	if (vkJson.scheme) {
 		vk = Object.values(vkJson).slice(2).flat(Infinity);
@@ -30,10 +31,11 @@ module.exports = (deployer) => {
 		await deployer.deploy(Pairing);
 		await deployer.link(Pairing, Verifier);
 		await deployer.deploy(Verifier);
+		await deployer.deploy(ERC20, "MyCoin", "MC");
 
 		await deployer.deploy(
 			EscrowShield,
-			erc20Address,
+			ERC20.address,
 			Verifier.address,
 			vkInput
 		);
