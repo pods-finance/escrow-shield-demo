@@ -80,7 +80,7 @@ services:
       - ./contracts/:/app/contracts:consistent
       - ./build/:/app/build:consistent
     ports:
-      - '9000:80'
+      - '3100:80'
     environment:
       HASH_TYPE: 'mimc'
       LOG_LEVEL: 'silly'
