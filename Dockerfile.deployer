@@ -9,6 +9,7 @@ COPY ./package.json ./package-lock.json ./
 COPY entrypoint.sh entrypoint.sh
 COPY contracts contracts
 COPY migrations migrations
+COPY orchestration orchestration
 COPY truffle-config.js truffle-config.js
 RUN chmod +x entrypoint.sh
 RUN npm ci
