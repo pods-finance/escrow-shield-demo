@@ -71,6 +71,7 @@ module.exports = {
   },
   // mongodb:
   // TODO: The latest Timber image has been edited... not sure how to create a 'user' for Timber anymore...
+  // mongodb: Timber
   mongo: {
     host: 'timber-mongo',
     port: '27017',
@@ -80,6 +81,8 @@ module.exports = {
     dbUrl: process.env.DB_URL || 'mongodb://admin:admin@timber-mongo:27017',
   },
   isLoggerEnabled: true,
+
+  // mongodb: Zapp
   MONGO_URL: 'mongodb://admin:admin@zapp-mongo:27017',
   COMMITMENTS_DB: process.env.MONGO_NAME,
   COMMITMENTS_COLLECTION: 'commitments',
