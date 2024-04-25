@@ -34,6 +34,9 @@ while getopts "n:a:m:k:r:s:" arg; do
   esac
 done
 
+echo "Compiling contracts"
+npx truffle compile
+
 cp docker-compose.zapp.override.default.yml docker-compose.zapp.override.yml
 
 cp entrypoint_default.sh entrypoint.sh
