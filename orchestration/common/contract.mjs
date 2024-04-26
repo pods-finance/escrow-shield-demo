@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from 'path'
 import config from "config";
 import GN from "general-number";
 import utils from "zkp-utils";
@@ -25,6 +24,7 @@ const { options } = config.web3;
 export async function getContractInterface(contractName) {
 	const path = contractPath(contractName);
 	const contractInterface = JSON.parse(fs.readFileSync(path, "utf8"));
+	// logger.debug('\ncontractInterface:', contractInterface);
 	return contractInterface;
 }
 
@@ -35,10 +35,9 @@ export async function getContractAddress(contractName) {
 	if (!deployedAddress) {
 		while (errorCount < 25) {
 			try {
-				console.log("contractName:", contractName);
 				const contractInterface = await getContractInterface(contractName);
 				const networkId = await web3.eth.net.getId();
-				console.log("networkId:", networkId);
+				logger.silly("networkId:", networkId);
 
 				if (
 					contractInterface &&
@@ -52,7 +51,6 @@ export async function getContractAddress(contractName) {
 				if (deployedAddress) break;
 			} catch (err) {
 				errorCount++;
-				console.error(err)
 				logger.warn(
 					"Unable to get a contract address - will try again in 5 seconds"
 				);
