@@ -55,7 +55,7 @@ export default async function deposit(
 	// Read dbs for keys and previous commitment values:
 
 	if (!fs.existsSync(keyDb))
-		await registerKey(utils.randomHex(31), "EscrowShield", false);
+		await registerKey(utils.randomHex(31), "EscrowShield", true);
 	const keys = JSON.parse(
 		fs.readFileSync(keyDb, "utf-8", (err) => {
 			console.log(err);
