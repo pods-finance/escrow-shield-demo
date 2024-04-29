@@ -1,0 +1,142 @@
+version: '3.5'
+
+services:
+  zapp-setup:
+    ports:
+      - '3000:3000'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - zokrates
+    volumes:
+      - ./circuits/:/app/circuits:delegated
+      - ./proving-files/:/app/output:delegated
+      - ./orchestration/common/write-vk.mjs:/app/write-vk.mjs
+      - ./orchestration/:/app/orchestration:delegated
+      - ./config/:/app/config:delegated
+    networks:
+      - zapp_network
+  zapp:
+    ports:
+      - '3000:3000'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - zokrates
+      - timber
+      - zapp-mongo
+    volumes:
+      - ./build:/app/build
+      - ./contracts/:/app/contracts/
+      - ./migrations/:/app/migrations/
+      - ./truffle-config.js:/app/truffle-config.js
+      - ./circuits/:/app/circuits:delegated
+      - ./orchestration/:/app/orchestration:delegated
+      - ./test/:/app/test:delegated
+      - ./config/:/app/config:delegated
+    environment:
+      # mudar isso aqui pra sepolia
+      BLOCKCHAIN_HOST: wss://sepolia.infura.io/ws/v3/<key>
+      BLOCKCHAIN_PORT: 8545
+      RPC_URL: wss://sepolia.infura.io/ws/v3/<key>
+      # mudar esses aqui pro que tá no .env do starlight-deployer
+      DEFAULT_ACCOUNT: '0xCeDEFc245eA0f0f0e036F888ada190D6eDb33203'
+      KEY: '0xfba2a47160a2bf5825227691b40d1b0941ca3f7828feac4c1e3edbacc866a441'
+      LOG_LEVEL: info
+      MONGO_HOST: mongodb://zapp-mongo
+      MONGO_PORT: 27019
+      MONGO_NAME: zapp_db
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
+    networks:
+      - zapp_network
+
+  zokrates:
+    image: ghcr.io/eyblockchain/zokrates-worker-updated:latest
+    # platform: linux/arm64/v8
+    volumes:
+      - ./circuits/:/app/circuits:delegated
+      - ./proving-files/:/app/output:delegated
+      - ./orchestration/common/write-vk.mjs:/app/write-vk.mjs
+      - ./orchestration/common/db/:/app/orchestration/common/db:delegated
+    environment:
+      PROVING_SCHEME: 'g16'
+    ports:
+      - '8080:80'
+    networks:
+      - zapp_network
+
+  timber:
+    build: 
+      context: https://github.com/EYBlockchain/timber.git#multiple-contracts:merkle-tree
+      dockerfile: Dockerfile
+    restart: on-failure
+    depends_on:
+      - timber-mongo
+    volumes:
+      - ./config/:/app/config
+      - ./contracts/:/app/contracts:consistent
+      - ./build/:/app/build:consistent
+    ports:
+      - '3100:80'
+
+    environment:
+      HASH_TYPE: 'mimc'
+      LOG_LEVEL: 'silly'
+      UNIQUE_LEAVES: 'true'
+      # mudar isso aqui pra sepolia
+      BLOCKCHAIN_HOST: wss://sepolia.infura.io/ws/v3/<key>
+      BLOCKCHAIN_PORT: 8545
+      RPC_URL: wss://sepolia.infura.io/ws/v3/<key>
+      # mudar esses aqui pro que tá no .env do starlight-deployer
+      DEFAULT_ACCOUNT: '0xCeDEFc245eA0f0f0e036F888ada190D6eDb33203'
+      KEY: '0xfba2a47160a2bf5825227691b40d1b0941ca3f7828feac4c1e3edbacc866a441'
+      CONTRACT_LOCATION: 'default'
+      MONGO_HOST: mongodb://admin:admin@timber-mongo:27017
+      MONGO_PORT: 27017
+      MONGO_NAME: merkle_tree
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
+      DB_URL: mongodb://admin:admin@timber-mongo:27017
+      
+    networks:
+      - zapp_network
+
+  #The database storing the merkle tree
+  timber-mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=merkle_tree
+    volumes:
+      - timber-mongo-volume:/data/db
+      - ./config:/app/config/
+    networks:
+      - zapp_network
+
+    #The database storing commitments
+  zapp-mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=zapp_db
+    volumes:
+      - zapp-commitment-volume:/data/db
+    networks:
+      - zapp_network
+
+volumes:
+  timber-mongo-volume: {}
+  zapp-commitment-volume: {}
+
+networks:
+  zapp_network:
+    name: zapp_network
