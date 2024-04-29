@@ -229,7 +229,7 @@ export async function service_timberProxy (req, res) {
 			data: req.body
 		})
 
-		return res.status(200).send(response.data);
+		return res.status(response.status).send(response.data);
 	} catch (err) {
 		logger.error(err);
 		res.send({ errors: [err.message] });
