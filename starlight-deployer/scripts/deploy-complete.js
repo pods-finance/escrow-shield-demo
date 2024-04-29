@@ -48,9 +48,9 @@ async function main () {
   const verifierAddress = await verifier.getAddress()
   console.log('Verifier deployed to:', verifierAddress)
 
-  console.log('esperando 5s')
+  console.log('esperando 60s')
   await delay(60000)
-  console.log('passou 5s')
+  console.log('passou 60s')
 
   if (hre.network.name !== 'localhost') {
     await verifyContract(hre, verifierAddress, [])
@@ -78,9 +78,9 @@ async function main () {
   console.log('ERC20 deployed to:', erc20Address)
 
   // const erc20Address = "0x69e791295f31511DCbD8BD36AE0B1cAcB66599b2"
-  console.log('esperando 5s')
+  console.log('esperando 60s')
   await delay(60000)
-  console.log('passou 5s')
+  console.log('passou 60s')
 
   if (hre.network.name !== 'localhost') {
     await verifyContract(hre, erc20Address, [erc20Data.name, erc20Data.symbol])
