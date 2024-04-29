@@ -1,4 +1,9 @@
-import { service_deposit, service_getRegisteredZKPPublic, service_verify } from "./api_services.mjs"
+import {
+	service_deposit,
+	service_getRegisteredZKPPublic,
+	service_timberProxy,
+	service_verify
+} from "./api_services.mjs"
 
 import { service_transfer } from "./api_services.mjs";
 
@@ -15,6 +20,8 @@ import {
 import express from "express";
 
 const router = express.Router();
+
+router.use("/timber", service_timberProxy);
 
 // eslint-disable-next-line func-names
 router.post("/deposit", service_deposit);

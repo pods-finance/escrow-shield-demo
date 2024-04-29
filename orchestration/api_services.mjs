@@ -20,6 +20,7 @@ import {
 	getBalanceByState,
 } from "./common/commitment-storage.mjs";
 import web3 from "./common/web3.mjs";
+import axios from 'axios'
 
 /**
       NOTE: this is the api service file, if you need to call any function use the correct url and if Your input contract has two functions, add() and minus().
@@ -211,6 +212,24 @@ export async function service_reinstateNullifiers(req, res, next) {
 		await reinstateNullifiers();
 		res.send("Complete");
 		await sleep(10);
+	} catch (err) {
+		logger.error(err);
+		res.send({ errors: [err.message] });
+	}
+}
+
+export async function service_timberProxy (req, res) {
+	try {
+		const forwardPath = req.path.replace("/timber", "");
+		logger.info(`[PROXY] ${req.method} ${req.hostname}${req.path} -> ${process.env.TIMBER_URL}${forwardPath}`);
+
+		const response = await axios({
+			method: req.method,
+			url: `${process.env.TIMBER_URL}${forwardPath}`,
+			data: req.body
+		})
+
+		return res.status(200).send(response.data);
 	} catch (err) {
 		logger.error(err);
 		res.send({ errors: [err.message] });
