@@ -12,7 +12,7 @@ services:
     volumes:
       - ./circuits/:/app/circuits:delegated
       - ./proving-files/:/app/output:delegated
-      - ./orchestration/common/write-vk.mjs:/app/write-vk.mjs
+      - ./orchestration/common/write-vk.mjs:/app/write-vk.mjs # "
       - ./orchestration/:/app/orchestration:delegated
       - ./config/:/app/config:delegated
     networks:
@@ -37,13 +37,11 @@ services:
       - ./test/:/app/test:delegated
       - ./config/:/app/config:delegated
     environment:
-      # mudar isso aqui pra sepolia
-      BLOCKCHAIN_HOST: wss://sepolia.infura.io/ws/v3/99af8263d15348a4af783fc772712ea2
+      BLOCKCHAIN_HOST: ws://ganache
       BLOCKCHAIN_PORT: 8545
-      RPC_URL: wss://sepolia.infura.io/ws/v3/99af8263d15348a4af783fc772712ea2
-      # mudar esses aqui pro que tá no .env do starlight-deployer
-      DEFAULT_ACCOUNT: '0xCeDEFc245eA0f0f0e036F888ada190D6eDb33203'
-      KEY: '0xfba2a47160a2bf5825227691b40d1b0941ca3f7828feac4c1e3edbacc866a441'
+      RPC_URL: ws://ganache:8545
+      DEFAULT_ACCOUNT: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
+      KEY: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'
       LOG_LEVEL: info
       MONGO_HOST: mongodb://zapp-mongo
       MONGO_PORT: 27019
@@ -81,18 +79,15 @@ services:
       - ./build/:/app/build:consistent
     ports:
       - '3100:80'
-
     environment:
       HASH_TYPE: 'mimc'
       LOG_LEVEL: 'silly'
       UNIQUE_LEAVES: 'true'
-      # mudar isso aqui pra sepolia
-      BLOCKCHAIN_HOST: wss://sepolia.infura.io/ws/v3/99af8263d15348a4af783fc772712ea2
+      BLOCKCHAIN_HOST: ws://ganache
       BLOCKCHAIN_PORT: 8545
-      RPC_URL: wss://sepolia.infura.io/ws/v3/99af8263d15348a4af783fc772712ea2
-      # mudar esses aqui pro que tá no .env do starlight-deployer
-      DEFAULT_ACCOUNT: '0xCeDEFc245eA0f0f0e036F888ada190D6eDb33203'
-      KEY: '0xfba2a47160a2bf5825227691b40d1b0941ca3f7828feac4c1e3edbacc866a441'
+      RPC_URL: ws://ganache:8545
+      DEFAULT_ACCOUNT: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
+      KEY: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'
       CONTRACT_LOCATION: 'default'
       MONGO_HOST: mongodb://admin:admin@timber-mongo:27017
       MONGO_PORT: 27017

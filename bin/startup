@@ -10,7 +10,7 @@ docker compose -f docker-compose.yml up -d zokrates
 
 sleep 5
 
-docker compose -f docker-compose.yml up -d deployer
+docker compose -f docker-compose.yml up deployer
 
 sleep 25
 
