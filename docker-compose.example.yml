@@ -1,22 +1,6 @@
 version: '3.5'
 
 services:
-  zapp-setup:
-    ports:
-      - '3000:3000'
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - zokrates
-    volumes:
-      - ./circuits/:/app/circuits:delegated
-      - ./proving-files/:/app/output:delegated
-      - ./orchestration/common/write-vk.mjs:/app/write-vk.mjs
-      - ./orchestration/:/app/orchestration:delegated
-      - ./config/:/app/config:delegated
-    networks:
-      - zapp_network
   zapp:
     ports:
       - '3000:3000'
@@ -43,6 +27,7 @@ services:
       RPC_URL: wss://sepolia.infura.io/ws/v3/<key>
       # mudar esses aqui pro que tá no .env do starlight-deployer
       DEFAULT_ACCOUNT: '0xCeDEFc245eA0f0f0e036F888ada190D6eDb33203'
+      ESCROW_SHIELD_ADDRESS: ''
       KEY: '0xfba2a47160a2bf5825227691b40d1b0941ca3f7828feac4c1e3edbacc866a441'
       LOG_LEVEL: info
       MONGO_HOST: mongodb://zapp-mongo
