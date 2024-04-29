@@ -43,6 +43,7 @@ export async function service_deposit(req, res, next) {
 		await web3.connect();
 		await new Promise((resolve) => setTimeout(() => resolve(), 3000));
 	} catch (err) {
+		console.log(err)
 		throw new Error(err);
 	}
 	try {
