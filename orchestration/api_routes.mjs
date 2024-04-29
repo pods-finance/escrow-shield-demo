@@ -1,4 +1,4 @@
-import { service_deposit } from "./api_services.mjs";
+import { service_deposit, service_getRegisteredZKPPublic, service_verify } from "./api_services.mjs"
 
 import { service_transfer } from "./api_services.mjs";
 
@@ -32,5 +32,8 @@ router.get("/getBalance", service_getBalance);
 router.get("/getBalanceByState", service_getBalanceByState);
 // nullifier route
 router.post("/reinstateNullifiers", service_reinstateNullifiers);
+
+router.get("/registeredZKPPublic", service_getRegisteredZKPPublic);
+router.get("/verify", service_verify);
 
 export default router;

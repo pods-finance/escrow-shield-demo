@@ -216,3 +216,25 @@ export async function service_reinstateNullifiers(req, res, next) {
 		res.send({ errors: [err.message] });
 	}
 }
+
+export async function service_getRegisteredZKPPublic(req, res, next) {
+	try {
+		const { address } = req.body;
+
+		return res.send({ address });
+	} catch (err) {
+		logger.error(err);
+		res.send({ errors: [err.message] });
+	}
+}
+
+export async function service_verify(req, res, next) {
+	try {
+		const { address } = req.body;
+
+		return res.send({ address });
+	} catch (err) {
+		logger.error(err);
+		res.send({ errors: [err.message] });
+	}
+}
