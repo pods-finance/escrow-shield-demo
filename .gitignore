@@ -1,3 +1,4 @@
 node_modules
 orchestration/common/db/key.json
 docker-compose.yml
+starlight-deployer/.env
