@@ -41873,9 +41873,72 @@
     "name": "solc",
     "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "1337": {
+      "events": {
+        "0x522933b35bbca3f00d1a1ae17c09663f9286c4d868dc335a0ca99a970bc08784": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "leafIndex",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "leafValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "root",
+              "type": "uint256"
+            }
+          ],
+          "name": "NewLeaf",
+          "type": "event"
+        },
+        "0x39623a9bbcaf7943af164a1aee0fd809f7101d4d8c7727239dace363779587db": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "minLeafIndex",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256[]",
+              "name": "leafValues",
+              "type": "uint256[]"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "root",
+              "type": "uint256"
+            }
+          ],
+          "name": "NewLeaves",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xD833215cBcc3f914bD1C9ece3EE7BF8B14f841bb",
+      "transactionHash": "0x26c0d3660a7c0fea4e99da448b666bdb268cf446dee0b62fbad5d770ed30b58e"
+    },
+    "11155111": {
+      "address": "0xF77e0Ab68A376E60DD08FA745A9e52606044fd19",
+      "blockNumber": 5776653
+    }
+  },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2024-04-22T15:28:41.616Z",
+  "updatedAt": "2024-04-26T19:04:00.410Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {
