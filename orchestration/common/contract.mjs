@@ -29,36 +29,7 @@ export async function getContractInterface(contractName) {
 }
 
 export async function getContractAddress(contractName) {
-	let deployedAddress;
-	let errorCount = 0;
-
-	if (!deployedAddress) {
-		while (errorCount < 25) {
-			try {
-				const contractInterface = await getContractInterface(contractName);
-				const networkId = await web3.eth.net.getId();
-				logger.silly("networkId:", networkId);
-
-				if (
-					contractInterface &&
-					contractInterface.networks &&
-					contractInterface.networks[networkId]
-				) {
-					deployedAddress = contractInterface.networks[networkId].address;
-				}
-				if (deployedAddress === undefined)
-					throw new Error("Shield address was undefined");
-				if (deployedAddress) break;
-			} catch (err) {
-				errorCount++;
-				logger.warn(
-					"Unable to get a contract address - will try again in 5 seconds"
-				);
-				await new Promise((resolve) => setTimeout(() => resolve(), 5000));
-			}
-		}
-	}
-
+	const deployedAddress = process.env.ESCROW_SHIELD_ADDRESS;
 	logger.silly("deployed address:", deployedAddress);
 	return deployedAddress;
 }

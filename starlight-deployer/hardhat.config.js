@@ -1,12 +1,22 @@
 require("@nomicfoundation/hardhat-toolbox");
 require('dotenv').config({path:__dirname+'/.env'});
-const { BESU_RPC_URL, LOCAL_RPC_URL, SEPOLIA_RPC_URL, BC_DEFAULT_PRIVATE_KEY, BANKA_PRIVATE_KEY, BANKB_PRIVATE_KEY, BANKC_PRIVATE_KEY, BANKD_PRIVATE_KEY } = process.env;
 
+const { BESU_RPC_URL, LOCAL_RPC_URL, SEPOLIA_RPC_URL, BC_DEFAULT_PRIVATE_KEY, BANKA_PRIVATE_KEY, BANKB_PRIVATE_KEY, BANKC_PRIVATE_KEY, BANKD_PRIVATE_KEY, DEV_MNEMONIC, POLYGON_RPC_URL } = process.env;
 
+require('./tasks/index');
 module.exports = {
   defaultNetwork: "besu",
   networks: {
     hardhat: {
+    },
+    polygon: {
+      url: POLYGON_RPC_URL,
+      accounts: {
+        mnemonic: DEV_MNEMONIC,
+        initialIndex: 0,
+        count: 1
+      },
+      timeout: 20000000
     },
     sepolia: {
       url: SEPOLIA_RPC_URL,
@@ -39,10 +49,13 @@ module.exports = {
     cache: "./cache",
   },
   etherscan: {
-    enabled: false,
+    apiKey: {
+      sepolia: process.env.ETHERSCAN_APIKEY,
+      polygon: process.env.POLYGONSCAN_APIKEY
+    },
   },
   sourcify: {
-    enabled: true,
+    enabled: false,
     customChains: [ {
       network: "besu",
       chainId: 25581337,
