@@ -1,4 +1,9 @@
-import { service_deposit } from "./api_services.mjs";
+import {
+	service_deposit,
+	service_getZKPPublicKey,
+	service_timberProxy,
+	service_verify
+} from "./api_services.mjs"
 
 import { service_transfer } from "./api_services.mjs";
 
@@ -16,6 +21,8 @@ import express from "express";
 
 const router = express.Router();
 
+router.use("/timber", service_timberProxy);
+
 // eslint-disable-next-line func-names
 router.post("/deposit", service_deposit);
 
@@ -32,5 +39,8 @@ router.get("/getBalance", service_getBalance);
 router.get("/getBalanceByState", service_getBalanceByState);
 // nullifier route
 router.post("/reinstateNullifiers", service_reinstateNullifiers);
+
+router.get("/getZKPPublicKey/:address", service_getZKPPublicKey);
+router.get("/verify", service_verify);
 
 export default router;
