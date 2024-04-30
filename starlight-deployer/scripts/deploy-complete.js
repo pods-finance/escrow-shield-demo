@@ -48,11 +48,11 @@ async function main () {
   const verifierAddress = await verifier.getAddress()
   console.log('Verifier deployed to:', verifierAddress)
 
-  console.log('esperando 60s')
-  await delay(60000)
-  console.log('passou 60s')
-
   if (hre.network.name !== 'localhost') {
+    // Tempo necessário para o contrato ser registrado e propagado no blockexplorer
+    console.log('esperando 60s')
+    await delay(60000)
+    console.log('passou 60s')
     await verifyContract(hre, verifierAddress, [])
   }
   // const verifierAddress = "0xC156e1f058f31b81088A2bbe0Ee8E9F992C5D115";
@@ -78,17 +78,19 @@ async function main () {
   console.log('ERC20 deployed to:', erc20Address)
 
   // const erc20Address = "0x69e791295f31511DCbD8BD36AE0B1cAcB66599b2"
-  console.log('esperando 60s')
-  await delay(60000)
-  console.log('passou 60s')
-
   if (hre.network.name !== 'localhost') {
+    console.log('esperando 60s')
+    await delay(60000)
+    console.log('passou 60s')
     await verifyContract(hre, erc20Address, [erc20Data.name, erc20Data.symbol])
   }
   saveMetadata(erc20Address, 'ERC20', chainId, blockNumber)
 
+  console.log('Minting tokens...')
   await mint(erc20, ADMIN_ADDRESS, 100000000)
   await mint(erc20, BANKD_ADDRESS, 100000000)
+  console.log('Tokens minted.')
+
   //
   blockNumber = await hre.ethers.provider.getBlockNumber()
   console.log('Deploying EscrowShield ...')
@@ -98,11 +100,10 @@ async function main () {
   const escrowShieldAddress = await escrowShield.getAddress()
   console.log('EscrowShield deployed to:', escrowShieldAddress)
 
-  console.log('esperando 60s')
-  await delay(60000)
-  console.log('passou 60s')
-
   if (hre.network.name !== 'localhost') {
+    console.log('esperando 60s')
+    await delay(60000)
+    console.log('passou 60s')
     await verifyContract(hre, escrowShieldAddress, [erc20Address, verifierAddress, vkInput])
   }
   saveMetadata(escrowShieldAddress, 'EscrowShield', chainId, blockNumber)
