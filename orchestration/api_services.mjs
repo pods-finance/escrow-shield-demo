@@ -21,6 +21,7 @@ import {
 } from "./common/commitment-storage.mjs";
 import web3 from "./common/web3.mjs";
 import axios from 'axios'
+import { getContractInstance } from './common/contract.mjs'
 
 /**
       NOTE: this is the api service file, if you need to call any function use the correct url and if Your input contract has two functions, add() and minus().
@@ -236,14 +237,22 @@ export async function service_timberProxy (req, res) {
 	}
 }
 
-export async function service_getRegisteredZKPPublic(req, res, next) {
+export async function service_getZKPPublicKey(req, res, next) {
 	try {
-		const { address } = req.body;
+		let { address } = req.params;
+		if (!web3.connection().utils.isAddress(address)) {
+			return res.status(422).send({ errors: [`Invalid address, received: ${address}`] });
+		}
 
-		return res.send({ address });
+		address = web3.connection().utils.toChecksumAddress(address);
+
+		const instance = await getContractInstance("EscrowShield");
+		const publicKey = await instance.methods.zkpPublicKeys(address).call();
+
+		return res.send({ address, publicKey });
 	} catch (err) {
 		logger.error(err);
-		res.send({ errors: [err.message] });
+		res.status(400).send({ errors: [err.message] });
 	}
 }
 
@@ -254,6 +263,6 @@ export async function service_verify(req, res, next) {
 		return res.send({ address });
 	} catch (err) {
 		logger.error(err);
-		res.send({ errors: [err.message] });
+		res.status(400).send({ errors: [err.message] });
 	}
 }

@@ -1,6 +1,6 @@
 import {
 	service_deposit,
-	service_getRegisteredZKPPublic,
+	service_getZKPPublicKey,
 	service_timberProxy,
 	service_verify
 } from "./api_services.mjs"
@@ -40,7 +40,7 @@ router.get("/getBalanceByState", service_getBalanceByState);
 // nullifier route
 router.post("/reinstateNullifiers", service_reinstateNullifiers);
 
-router.get("/registeredZKPPublic", service_getRegisteredZKPPublic);
+router.get("/getZKPPublicKey/:address", service_getZKPPublicKey);
 router.get("/verify", service_verify);
 
 export default router;
