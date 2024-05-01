@@ -258,9 +258,43 @@ export async function service_getZKPPublicKey(req, res, next) {
 
 export async function service_verify(req, res, next) {
 	try {
-		const { address } = req.body;
+		const { proof, inputs, verificationKeys } = req.body;
+		const errors = []
 
-		return res.send({ address });
+		if (!Array.isArray(proof)) {
+			errors.push({
+				name: 'proof',
+				message: `proof is not an array`,
+				received: proof
+			})
+		}
+
+		if (!Array.isArray(inputs)) {
+			errors.push({
+				name: 'inputs',
+				message: `inputs is not an array`,
+				received: inputs
+			})
+		}
+
+		if (!Array.isArray(verificationKeys)) {
+			errors.push({
+				name: 'verificationKeys',
+				message: `verificationKeys is not an array`,
+				received: verificationKeys
+			})
+		}
+
+		if (errors.length > 0) {
+			return res.status(422).send({ errors });
+		}
+
+		const verifier = await getContractInstance("Verifier");
+		logger.info(`Verifier ${verifier.options.address}`);
+		logger.info({ proof, inputs, verifier });
+		const result = await verifier.methods.verify(proof, inputs, verificationKeys).call();
+		logger.info(`VerifierResponse: ${JSON.stringify(result)}`);
+		return res.send({ result });
 	} catch (err) {
 		logger.error(err);
 		res.status(400).send({ errors: [err.message] });
