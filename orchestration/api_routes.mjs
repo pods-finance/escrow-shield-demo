@@ -41,6 +41,6 @@ router.get("/getBalanceByState", service_getBalanceByState);
 router.post("/reinstateNullifiers", service_reinstateNullifiers);
 
 router.get("/getZKPPublicKey/:address", service_getZKPPublicKey);
-router.get("/verify", service_verify);
+router.post("/verify", service_verify);
 
 export default router;
