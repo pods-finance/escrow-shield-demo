@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
